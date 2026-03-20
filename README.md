@@ -8,5 +8,5 @@ this is a `live chatting room`.
 
 ## Run the project
 ```
-$ index.js
+$ node index.js
 ```

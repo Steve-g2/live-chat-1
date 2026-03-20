@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live chat</title>
+    <link rel="stylesheet" href="css/chat.css">
+</head>
+
+<body>
+   <div class="chat-page">
+    <div class="chat-history">
+        <% for (const his of chat.history) {%>
+            <div><%= his %></div>
+        <% } %>
+    </div>
+    <div class="chat-form">
+        <input type="text"/>
+        <button>Send</button>
+    </div>
+   </div>
+   <script>
+    document.addEventListener('DOMcontentloaded', () => {
+        setInterval(() => {
+            fetch('/poll', res => {
+                Method: 'GET'
+            });
+        }, 2000);
+    });
+   </script>
+</body>
+
+</html>

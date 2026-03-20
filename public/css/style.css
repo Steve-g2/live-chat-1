@@ -1,0 +1,36 @@
+body {
+    background-color: grey;
+}
+
+.main {
+    width: 800px;
+    background-color: green;
+    margin: 10px auto;
+    padding-bottom: 50px;
+}
+
+.main h1,
+h3 {
+    text-align: center;
+}
+
+.main .controls {
+    width: 50%;
+    margin: 10px auto;
+
+}
+
+.main .controls button {
+    display: block;
+    width: 200px;
+    height: 2rem;
+    margin: 10px auto;
+
+}
+
+.main .controls input {
+    width: 100%;
+    font-size: 2rem;
+    text-align: center;
+
+}
