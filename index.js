@@ -24,8 +24,13 @@ const chat = {
 app.post('/join', (req, res) => {
     const nickname = req.body.nickname;
     chat.users.push(nickname);
-    chat.history.push(`welcome ${nickname} to join the chat`)
-    res.render('chat', { chat });
+    chat.history.push({
+        nickname: 'system',
+        message: `welcome ${nickname} to join the chat`,
+        datetime: new Date()
+    });
+    console.log(chat.history.length);
+    res.render('chat', { chat, nickname });
 });
 
 app.get('/poll', (req, res) => {
@@ -34,7 +39,13 @@ app.get('/poll', (req, res) => {
 
 app.post('/send', (req, res) => {
     const msg = req.body.messageContent;
-    console.log(msg);
+    const nickname = req.body.nickname;
+    console.log(msg, ' ', nickname);
+    chat.history.push({
+        nickname: nickname,
+        message: msg,
+        datetime: new Date()
+    });
     res.send('OK');
 });
 
