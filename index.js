@@ -25,7 +25,7 @@ app.post('/join', (req, res) => {
     const nickname = req.body.nickname;
     chat.users.push(nickname);
     chat.history.push({
-        nickname: 'system',
+        nickname: 'System',
         message: `welcome ${nickname} to join the chat`,
         datetime: new Date()
     });

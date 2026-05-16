@@ -26,7 +26,7 @@
     </div>
     <script>
         const nickname = '<%= nickname %>';
-
+        let autoScroll = true;
         function sendMessage() {
             const messageContent = document.getElementById('messageBox').value;
             if (messageContent.trim() === ''){
@@ -40,12 +40,34 @@
                 },
                 body: JSON.stringify({messageContent, nickname})
             });
+
+            document.getElementById('messageBox').value = '';
         }
         async function poll() {
             const response = await fetch('/poll');
             const data = await response.json();
-            document.getElementById('chatHistory').innerHTML = data.history.map(his => `<p>${his.nickname}: ${his.message} </p>`).join('');
-            setTimeout(poll, 2000);
+            const chatHistoryElem = document.getElementById('chatHistory');
+            chatHistoryElem.innerHTML = data.history;
+            document.getElementById('chatHistory').innerHTML = data.history
+            .map(his => `<p class="${getClassNameByNickname(his.nickname)}">${his.nickname}: ${his.
+            message}</p>`).join('');
+            if (autoScroll) {
+                chatHistoryElem.scrollTop = chatHistoryElem.scrollHeight;
+            }
+
+
+
+            setTimeout(poll, 400);
+        }
+
+        function getClassNameByNickname (theNickname) {
+            if (theNickname === 'System') {
+                return 'system-msg'
+            }
+            if (theNickname === nickname) {
+                return 'myself-msg'
+            }
+            return '';
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -54,6 +76,12 @@
                 e.preventDefault();
                 sendMessage();
             })
+
+            document.getElementById('chatHistory').addEventListener('scroll', () => {
+                const chatHisElem = document.getElementById('chatHistory');
+                const bottomSpace = chatHisElem.scrollHeight - chatHisElem.scrollTop - chatHisElem.clientHeight;
+                autoScroll = bottomSpace < 5;
+            });
         });
     </script>
 </body>

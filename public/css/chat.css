@@ -8,6 +8,8 @@
     width: 100%;
     height: 85%;
     background-color: blue;
+    overflow-y: auto;
+    overflow-x: auto;
 }
 
 .chat-form {
@@ -25,4 +27,13 @@
 .chat-form input {
     width: 80%;
     height: 80%;
+}
+
+.system-msg {
+   color: lime;
+}
+
+.myself-msg {
+    color: whitesmoke;
+
 }
