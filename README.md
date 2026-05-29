@@ -10,3 +10,9 @@ this is a `live chatting room`.
 ```
 $ node index.js
 ```
+
+
+## Issue tracking
+- display message date time
+- `/poll` returns only new messages
+- The front end should recover from server restart

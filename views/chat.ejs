@@ -11,11 +11,6 @@
 <body>
     <div class="chat-page">
         <div id="chatHistory"class="chat-history">
-            <% for (const his of chat.history) {%>
-                <div>
-                    <%= his.nickname + ': ' + his.message %>
-                </div>
-                <% } %>
         </div>
         <div class="chat-form">
             <form action="" id="sendMessageForm">
@@ -26,6 +21,7 @@
     </div>
     <script>
         const nickname = '<%= nickname %>';
+        let lastMessageId = '<%= userJoinMessageId-1 %>'
         let autoScroll = true;
         function sendMessage() {
             const messageContent = document.getElementById('messageBox').value;
@@ -44,20 +40,25 @@
             document.getElementById('messageBox').value = '';
         }
         async function poll() {
-            const response = await fetch('/poll');
+            const response = await fetch('/poll?lastMessageId=' + lastMessageId);
             const data = await response.json();
+            console.log('poll data', data);
+            
+            
             const chatHistoryElem = document.getElementById('chatHistory');
-            chatHistoryElem.innerHTML = data.history;
-            document.getElementById('chatHistory').innerHTML = data.history
-            .map(his => `<p class="${getClassNameByNickname(his.nickname)}">${his.nickname}: ${his.
-            message}</p>`).join('');
+            if(data.history.length > 0) {
+                chatHistoryElem.innerHTML += data.history
+                .map(his => `<p class="${getClassNameByNickname(his.nickname)}">${his.nickname}: ${his.
+                message}</p>`).join('');
+                lastMessageId = data.history[data.history.length-1].id;
+            }
             if (autoScroll) {
                 chatHistoryElem.scrollTop = chatHistoryElem.scrollHeight;
             }
 
 
 
-            setTimeout(poll, 400);
+            setTimeout(poll, 100);
         }
 
         function getClassNameByNickname (theNickname) {
