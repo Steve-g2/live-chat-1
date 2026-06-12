@@ -14,7 +14,7 @@
         </div>
         <div class="chat-form">
             <form action="" id="sendMessageForm">
-                <input type="text" id="messageBox" autocomplete="off" />
+                <input type="text" id="messageBox" autocomplete="off" autofocus/>
                 <button>Send</button>
             </form>
         </div>
@@ -40,20 +40,23 @@
             document.getElementById('messageBox').value = '';
         }
         async function poll() {
-            const response = await fetch('/poll?lastMessageId=' + lastMessageId);
-            const data = await response.json();
-            console.log('poll data', data);
+            try {
+                const response = await fetch('/poll?lastMessageId=' + lastMessageId);
+                const data = await response.json();
 
 
-            const chatHistoryElem = document.getElementById('chatHistory');
-            if (data.history.length > 0) {
-                chatHistoryElem.innerHTML += data.history
-                    .map(his => `<p class="${getClassNameByNickname(his.nickname)}"><span class="message-datetime">${displayedDateTime(new Date(his.datetime))}</span><br>${his.nickname}: ${his.
-                        message}</p>`).join('');
-                lastMessageId = data.history[data.history.length - 1].id;
-            }
-            if (autoScroll) {
-                chatHistoryElem.scrollTop = chatHistoryElem.scrollHeight;
+                const chatHistoryElem = document.getElementById('chatHistory');
+                if (data.history.length > 0) {
+                    chatHistoryElem.innerHTML += data.history
+                        .map(his => `<p class="${getClassNameByNickname(his.nickname)}"><span class="message-datetime" data-ts="${his.datetime}">${displayedDateTime(new Date(his.datetime))}</span><br>${his.nickname}: ${his.
+                            message}</p>`).join('');
+                    lastMessageId = data.history[data.history.length - 1].id;
+                }
+                if (autoScroll) {
+                    chatHistoryElem.scrollTop = chatHistoryElem.scrollHeight;
+                }
+            } catch (error) {
+                console.error(error);
             }
 
 
@@ -83,12 +86,27 @@
                 const bottomSpace = chatHisElem.scrollHeight - chatHisElem.scrollTop - chatHisElem.clientHeight;
                 autoScroll = bottomSpace < 5;
             });
+            updateDisplayedTime();
         });
+            function updateDisplayedTime() {
+                
+                const dateTimeSpans = document.getElementById('chatHistory').querySelectorAll('span.message-datetime');
+                dateTimeSpans.forEach(dateTimeSpan => {
+                    dateTimeSpan.dataset.get
+                    const timestamp = dateTimeSpan.dataset['ts'];
+                    const dateTimestring = displayedDateTime(new Date(timestamp));
+                    dateTimeSpan.innerHTML = dateTimestring;
+                })
+
+
+                setTimeout(updateDisplayedTime, 30000);
+            }
+
 
             const month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
         function displayedDateTime(dateTime) {
-            const nowDate = new Date.now()
+            const nowDate = new Date()
             const now = Date.now()
             if (now - dateTime.getTime() < 60 * 1000) {
                 return 'now';
