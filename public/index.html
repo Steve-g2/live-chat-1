@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live chat</title>
+    <title>New tab</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -13,11 +13,43 @@
         <h1>welcome to live chat</h1>
         <h3>what is your name</h3>
         <div class="controls">
-            <form action="/join" method="post">
-                <div><input type="text" name="nickname" placeholder="Enter your name" autocomplete="off" autofocus></div>
+            <form id="loginForm" action="/join" method="post">
+                <div><input type="text" id="nickname" name="nickname" placeholder="Enter your name" autocomplete="off" autofocus></div>
                 <div><button>Join</button></div>
+            </form>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('loginForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const nickname = document.getElementById('nickname').value;
+                if (nickname.trim() === '') {
+                    return;
+                }
+                if (nickname === 'System') {
+                    alert('The nickname "System" is reserved. Choose another one.');
+                    return;
+                }
+                if (await nicknameExists(nickname)) {
+                    alert('Duplicate nickname, try another one.');
+                    return;
+                }
+                e.target.submit();
+            });
+        });
+
+        async function nicknameExists(nickname) {
+            try {
+                const response = await fetch(`/check-nickname?nickname=${encodeURIComponent(nickname)}`);
+                const data = await response.json();
+                return data.exists;
+            } catch (error) {
+                console.error('Error checking nickname:', error);
+                return false;
+            }
+        }
+    </script>
 </body>
 
 </html>

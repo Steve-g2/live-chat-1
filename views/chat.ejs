@@ -39,6 +39,7 @@
 
             document.getElementById('messageBox').value = '';
         }
+        let pollinterval = 100;
         async function poll() {
             try {
                 const response = await fetch('/poll?lastMessageId=' + lastMessageId);
@@ -55,8 +56,10 @@
                 if (autoScroll) {
                     chatHistoryElem.scrollTop = chatHistoryElem.scrollHeight;
                 }
+                pollinterval = 100;
             } catch (error) {
                 console.error(error);
+                pollinterval = Math.min(pollinterval * 2, 30000);
             }
 
 
@@ -97,7 +100,7 @@
                     const dateTimestring = displayedDateTime(new Date(timestamp));
                     dateTimeSpan.innerHTML = dateTimestring;
                 })
-
+ 
 
                 setTimeout(updateDisplayedTime, 30000);
             }

@@ -13,6 +13,6 @@ $ node index.js
 
 
 ## Issue tracking
-- display message date time
-- `/poll` returns only new messages
-- The front end should recover from server restart
+- display message date time (done)
+- `/poll` returns only new messages (done)
+- The front end should recover from server restart (done)
